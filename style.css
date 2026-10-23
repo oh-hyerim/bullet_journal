@@ -1,0 +1,1308 @@
+/* ========================================================
+   Lovely Pink Diary - Digital Bullet Journal Design System
+   ======================================================== */
+
+:root {
+  /* 1. Soft Pink Diary Theme Tokens */
+  --bg-primary: #FFF5F7;          /* 은은한 밀크 핑크 배경 */
+  --bg-card: #FFFFFF;             /* 새하얀 다이어리 속지 */
+  --bg-card-subtle: #FFF0F3;      /* 부드러운 딸기우유 서브 배경 */
+  --bg-hover: #FCE7EC;            /* 핑크 호버 */
+  
+  --text-main: #3D2F33;           /* 부드러운 다크 초코/차콜 */
+  --text-muted: #8E7C82;          /* 차분한 웜 그레이 */
+  --border-color: #F8D7E0;        /* 다이어리 핑크 테두리 */
+  --border-stitch: #F4BAC9;       /* 다이어리 스티치 포인트 */
+  --dot-grid: radial-gradient(#F5CCD7 1.2px, transparent 1.2px);
+
+  /* Lovely Accent Colors */
+  --accent-pink: #F472B6;         /* 러블리 로즈 핑크 */
+  --accent-soft: rgba(244, 114, 182, 0.15);
+  --accent-hover: #EC4899;
+  --priority-color: #F59E0B;
+  --success-pink: #FB7185;        /* 스트릭 완료 핑크 */
+  --danger-red: #EF4444;          /* 현재 시각선 */
+
+  --shadow-diary: 0 4px 14px rgba(236, 72, 153, 0.08), 0 1px 3px rgba(0,0,0,0.02);
+  --shadow-sm: 0 1px 3px rgba(244, 114, 182, 0.1);
+  --shadow-md: 0 4px 10px rgba(244, 114, 182, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Secondary Latte Pink Mood */
+body.theme-latte {
+  --bg-primary: #FAF4F2;
+  --bg-card: #FFFFFF;
+  --bg-card-subtle: #F5ECE8;
+  --bg-hover: #EFE4DF;
+  --text-main: #3E3430;
+  --text-muted: #8C807A;
+  --border-color: #E8DCD6;
+  --accent-pink: #E08A74;
+  --accent-hover: #CD755E;
+  --dot-grid: radial-gradient(#E5D3CC 1.2px, transparent 1.2px);
+}
+
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  background-image: var(--dot-grid);
+  background-size: 22px 22px;
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+  transition: all 0.25s ease;
+}
+
+/* ========================================================
+   Header (가로 한 줄 컴팩트 & 미니멀 다이어리)
+   ======================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1.5px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  height: 52px;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icon-badge {
+  font-size: 20px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 7. 날짜 클릭 가능 영역 및 숨겨진 datepicker */
+.date-selector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-card-subtle);
+  padding: 3px 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.date-selector:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-pink);
+}
+
+.current-date-clickable {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  padding: 2px 6px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.hidden-date-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.pill-btn {
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  color: var(--accent-pink);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pill-btn:hover {
+  background: var(--accent-pink);
+  color: #FFF;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.icon-btn:hover {
+  color: var(--accent-pink);
+  background: var(--bg-hover);
+}
+
+/* 5. Google Auth Button (아이콘 전용 원형 컴팩트) */
+.google-auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.google-auth-btn:hover {
+  border-color: var(--accent-pink);
+  background: var(--bg-hover);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.avatar-img {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-pink);
+}
+
+.user-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.logout-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ========================================================
+   Main Dashboard Grid (다이어리 바인더 스타일)
+   ======================================================== */
+.dashboard-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 1.25fr 0.95fr;
+  gap: 16px;
+  padding: 16px;
+  max-width: 1680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.dashboard-panel {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-diary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: calc(100vh - 84px);
+  position: relative;
+}
+
+/* 다이어리 상단 바인더 링 포인트 효과 */
+.dashboard-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-pink), #FBBF24, var(--accent-pink));
+  opacity: 0.7;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  height: 44px;
+}
+
+.panel-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel-icon {
+  font-size: 16px;
+  color: var(--accent-pink);
+}
+
+.panel-title-wrap h2 {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.panel-meta {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-pink);
+  background: var(--bg-card-subtle);
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+}
+
+/* 4. 타임라인 현재 시각 (차분한 검정 텍스트) */
+.now-clock-wrap {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--bg-card-subtle);
+  padding: 3px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* ========================================================
+   1. Bullet To-Do (3. 가로 한 줄 컴팩트)
+   ======================================================== */
+.todo-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card-subtle);
+}
+
+.symbol-select-wrap {
+  position: relative;
+}
+
+.symbol-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: #FFF;
+  color: var(--accent-pink);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.symbol-dropdown {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 18px rgba(244, 114, 182, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  gap: 3px;
+  z-index: 50;
+  min-width: 130px;
+}
+
+.sym-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  text-align: left;
+}
+
+.sym-item span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.sym-item:hover {
+  background: var(--bg-hover);
+  color: var(--accent-pink);
+}
+
+.todo-input-bar input[type="text"] {
+  flex: 1;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.todo-input-bar input[type="text"]:focus {
+  border-color: var(--accent-pink);
+}
+
+.time-addon-btn {
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.submit-add-btn {
+  background: var(--accent-pink);
+  color: #FFF;
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.submit-add-btn:hover {
+  background: var(--accent-hover);
+}
+
+.time-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 14px;
+  background: var(--bg-card-subtle);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.time-input-wrap input {
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* 3. 투두 리스트 아이템: 가로 한 줄에 꽉 차게 컴팩트 */
+.todo-list-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 10px;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  height: 38px;
+}
+
+.todo-item:hover {
+  border-color: var(--accent-pink);
+  background: #FFFAFC;
+}
+
+.todo-symbol-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  background: var(--bg-card-subtle);
+  color: var(--accent-pink);
+  flex-shrink: 0;
+  border: 1px solid transparent;
+}
+
+.todo-symbol-badge:hover {
+  border-color: var(--accent-pink);
+}
+
+.todo-item-symbol-wrap {
+  position: relative;
+}
+
+.todo-item-dropdown {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 20px rgba(244, 114, 182, 0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  gap: 2px;
+  z-index: 60;
+  min-width: 130px;
+}
+
+.todo-item-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  text-align: left;
+}
+
+.todo-item-dropdown button:hover {
+  background: var(--bg-hover);
+  color: var(--accent-pink);
+}
+
+.todo-item.done .todo-symbol-badge {
+  background: #10B981;
+  color: #FFF;
+}
+
+.todo-item.migrated .todo-symbol-badge {
+  background: #EC4899;
+  color: #FFF;
+}
+
+.todo-item.event .todo-symbol-badge {
+  background: #F59E0B;
+  color: #FFF;
+}
+
+.todo-item.note .todo-symbol-badge {
+  background: #9CA3AF;
+  color: #FFF;
+}
+
+.todo-text-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.todo-title {
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 2. 완료 시 빨간 삭제선 */
+.todo-item.done .todo-title {
+  text-decoration: line-through;
+  text-decoration-color: #EF4444; /* 빨간 취소선 */
+  text-decoration-thickness: 2px;
+  color: var(--text-muted);
+}
+
+.todo-time-badge {
+  font-size: 11px;
+  color: var(--accent-pink);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  flex-shrink: 0;
+  background: var(--bg-card-subtle);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.todo-delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0.3;
+  padding: 3px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.todo-item:hover .todo-delete-btn {
+  opacity: 1;
+}
+
+.todo-delete-btn:hover {
+  color: var(--danger-red);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 10px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  gap: 4px;
+}
+
+/* ========================================================
+   2. 24-Hour Timetable
+   ======================================================== */
+.timetable-scroll-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding: 8px 12px;
+}
+
+.timetable-helper-tip {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-card-subtle);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.timetable-grid {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.time-row {
+  display: flex;
+  height: 48px;
+  border-bottom: 1px dashed var(--border-color);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.time-row:hover {
+  background: rgba(244, 114, 182, 0.06);
+}
+
+.time-label {
+  width: 44px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding-top: 2px;
+  user-select: none;
+}
+
+.time-block-area {
+  flex: 1;
+  position: relative;
+  padding-left: 6px;
+  display: flex;
+  align-items: center;
+}
+
+/* 4. 같은 시간대 다중 일정 최대 3개 및 역삼각형 버튼 */
+.time-block-multi-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  padding: 4px 0;
+}
+
+.time-mini-block {
+  flex: 1;
+  min-width: 0;
+  background: #FDF2F8;
+  border-left: 3px solid var(--accent-pink);
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.time-more-btn {
+  background: var(--accent-pink);
+  color: #FFF;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  height: 26px;
+  transition: background 0.15s ease;
+}
+
+.time-more-btn:hover {
+  background: var(--accent-hover);
+}
+
+.time-more-popover {
+  position: absolute;
+  right: 6px;
+  top: 32px;
+  background: #FFF;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(61, 47, 51, 0.2);
+  padding: 8px;
+  z-index: 70;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 1. 시간 라벨 아래 조용한 '현재시간' 텍스트 (빨간줄 완전 제거) */
+.current-hour-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-hover);
+  padding: 1px 3px;
+  border-radius: 3px;
+  margin-top: 2px;
+  line-height: 1;
+  text-align: center;
+  display: inline-block;
+}
+
+.time-more-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.time-more-popover-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.time-more-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.time-more-close-btn:hover {
+  color: var(--accent-pink);
+}
+
+/* ========================================================
+   3. Habit Tracker (5. 일~토 고정 & 9. 당일부터 삭제)
+   ======================================================== */
+.add-habit-btn {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  color: var(--accent-pink);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.add-habit-btn:hover {
+  background: var(--accent-pink);
+  color: #FFF;
+}
+
+.habit-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.sub-heading {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.mt-3 {
+  margin-top: 14px;
+}
+
+.habit-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 3. 해빗 아이템: 가로 1줄 컴팩트 + 9. 삭제(x) 버튼 */
+.habit-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #FFF;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  height: 38px;
+}
+
+.habit-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.habit-emoji {
+  font-size: 16px;
+}
+
+.habit-name {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.habit-actions-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.habit-check-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-color);
+  background: #FFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+.habit-check-btn.completed {
+  background: var(--accent-pink);
+  border-color: var(--accent-pink);
+  color: #FFF;
+}
+
+.habit-del-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0.3;
+  padding: 2px 4px;
+  font-size: 12px;
+}
+
+.habit-item:hover .habit-del-btn {
+  opacity: 1;
+}
+
+.habit-del-btn:hover {
+  color: var(--danger-red);
+}
+
+/* 5. 주간 스트릭 요일 헤더 (일월화수목금토) */
+.streak-header-days {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  gap: 4px;
+  padding: 0 8px 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.streak-header-days span:first-child {
+  grid-column: 2;
+  color: #EF4444; /* 일요일 빨간색 */
+}
+
+.streak-header-days span:last-child {
+  color: #3B82F6; /* 토요일 파란색 */
+}
+
+.streak-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg-card-subtle);
+  padding: 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.streak-row {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  align-items: center;
+  gap: 4px;
+}
+
+.streak-habit-title {
+  font-size: 11px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.streak-cell {
+  height: 22px;
+  border-radius: 4px;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #FFF;
+  font-weight: 700;
+  transition: all 0.15s ease;
+}
+
+.streak-cell.done {
+  background: var(--accent-pink);
+  border-color: var(--accent-pink);
+}
+
+/* 1. 삭제된 날짜 칸: 연한 회색으로 채움 */
+.streak-cell.deleted-cell {
+  background: #E8E5E7 !important;
+  border-color: #DDD8DA !important;
+  color: #B0A8AB !important;
+  cursor: not-allowed;
+}
+
+/* 2. 주간/월간 모드 토글 탭 & 월간 달력 그리드 */
+.streak-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+.habit-view-toggle {
+  display: flex;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+
+.view-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.view-toggle-btn.active {
+  background: var(--accent-pink);
+  color: #FFF;
+}
+
+.monthly-select-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.monthly-habit-select {
+  flex: 1;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--text-main);
+  outline: none;
+}
+
+.monthly-calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.monthly-calendar-header span:first-child { color: #EF4444; }
+.monthly-calendar-header span:last-child { color: #3B82F6; }
+
+.monthly-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  background: var(--bg-card-subtle);
+  padding: 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.month-day-cell {
+  height: 32px;
+  border-radius: 4px;
+  background: #FFF;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-main);
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.month-day-cell.empty {
+  background: transparent;
+  border-color: transparent;
+}
+
+.month-day-cell.done {
+  background: var(--accent-pink);
+  border-color: var(--accent-pink);
+  color: #FFF;
+  font-weight: 700;
+}
+
+.month-day-cell.deleted-cell {
+  background: #E8E5E7 !important;
+  border-color: #DDD8DA !important;
+  color: #B0A8AB !important;
+  cursor: not-allowed;
+}
+
+.month-day-cell.today {
+  border: 2px solid var(--accent-pink) !important;
+}
+
+.month-day-num {
+  font-size: 9px;
+  line-height: 1;
+}
+
+.month-day-check {
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* ========================================================
+   Modal Forms
+   ======================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(61, 47, 51, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal-card {
+  background: #FFF;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 360px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(244, 114, 182, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.modal-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  outline: none;
+  font-size: 13px;
+}
+
+.emoji-picker-row {
+  display: flex;
+  gap: 6px;
+}
+
+.emoji-choice {
+  font-size: 18px;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: #FFF;
+  cursor: pointer;
+}
+
+.emoji-choice.selected {
+  border-color: var(--accent-pink);
+  background: var(--bg-card-subtle);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.cancel-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  background: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.save-btn {
+  padding: 6px 14px;
+  background: var(--accent-pink);
+  color: #FFF;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 300;
+  pointer-events: none;
+}
+
+.toast-msg {
+  background: rgba(61, 47, 51, 0.92);
+  color: #FFF;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  box-shadow: var(--shadow-md);
+  animation: fadeInOut 2.5s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(10px); }
+  15% { opacity: 1; transform: translateY(0); }
+  85% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.mobile-nav-bar {
+  display: none;
+}
+
+/* ========================================================
+   Mobile Responsiveness
+   ======================================================== */
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+
+  .dashboard-panel {
+    display: none;
+    height: calc(100vh - 120px);
+  }
+
+  .dashboard-panel.active-panel {
+    display: flex;
+  }
+
+  .mobile-nav-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 54px;
+    background: #FFF;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -2px 10px rgba(244, 114, 182, 0.1);
+    z-index: 100;
+  }
+
+  .nav-tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    gap: 2px;
+  }
+
+  .nav-tab-btn.active {
+    color: var(--accent-pink);
+    font-weight: 700;
+  }
+}

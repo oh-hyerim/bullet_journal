@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>러블리 다이어리 불렛저널</title>
+  <meta name="description" content="핑크 다이어리 감성의 크로스 디바이스 불렛저널. 투두, 타임테이블, 해빗트래커.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=Nanum+Pen+Script&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-pink">
+  <!-- 상단 글로벌 네비게이션 헤더 -->
+  <header class="app-header">
+    <div class="header-left">
+      <!-- 2. 왼쪽 상단 이름 제거, 귀여운 다이어리 아이콘만 미니멀하게 배치 -->
+      <div class="header-icon-badge" title="나만의 핑크 다이어리">📖</div>
+
+      <!-- 7. 날짜 클릭 시 직접 날짜 선택 가능한 피커 연동 -->
+      <div class="date-selector" title="클릭하여 날짜 변경">
+        <button id="prevDateBtn" class="icon-btn" title="이전 날">◀</button>
+        <span id="currentDateDisplay" class="current-date-clickable">2026년 10월 21일 (수) 📅</span>
+        <input type="date" id="hiddenDatePicker" class="hidden-date-input" aria-label="날짜 직접 선택">
+        <button id="nextDateBtn" class="icon-btn" title="다음 날">▶</button>
+        <button id="todayBtn" class="pill-btn">오늘</button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <!-- 테마 토글 버튼 -->
+      <button id="themeToggleBtn" class="icon-btn" title="다이어리 무드 전환">🌸</button>
+      
+      <!-- 3. 구글 아이콘 버튼: 텍스트 없이 단일 아이콘만 존재 (로그인 전: G, 로그인 후: 아바타/체크, 재클릭 시 로그아웃) -->
+      <div class="auth-area">
+        <button id="googleLoginBtn" class="google-auth-btn" title="구글 계정 연동 (클릭)">
+          <svg id="googleLoggedOutIcon" class="google-icon" viewBox="0 0 24 24" width="18" height="18">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span id="googleLoggedInIcon" class="google-user-icon hidden" title="연동 완료 (클릭 시 로그아웃)">🌸</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 레이아웃 (3단 핑크 다이어리 대시보드) -->
+  <main class="dashboard-grid">
+    <!-- 1단: 불렛 To-Do 섹션 -->
+    <section id="sectionTodo" class="dashboard-panel panel-todo active-panel">
+      <div class="panel-header">
+        <div class="panel-title-wrap">
+          <span class="panel-icon">•</span>
+          <h2>투두 리스트</h2>
+        </div>
+        <span class="panel-meta" id="todoCountMeta">0건</span>
+      </div>
+
+      <!-- 불렛 신속 입력 바 (가로 1줄 최적화) -->
+      <form id="todoForm" class="todo-input-bar">
+        <div class="symbol-select-wrap">
+          <button type="button" id="symbolPickerBtn" class="symbol-btn task" data-symbol="task" title="기호 선택">•</button>
+          <div id="symbolDropdown" class="symbol-dropdown hidden">
+            <button type="button" data-sym="task" class="sym-item">• <span>할 일</span></button>
+            <button type="button" data-sym="done" class="sym-item">✕ <span>완료</span></button>
+            <button type="button" data-sym="migrated" class="sym-item">&gt; <span>연기(내일로)</span></button>
+            <button type="button" data-sym="event" class="sym-item">○ <span>이벤트</span></button>
+            <button type="button" data-sym="note" class="sym-item">― <span>메모</span></button>
+          </div>
+        </div>
+
+        <input type="text" id="todoInput" placeholder="할 일 입력 (Enter)" autocomplete="off" required>
+        
+        <button type="button" id="timeToggleBtn" class="time-addon-btn" title="시간 배정">🕒</button>
+        <button type="submit" class="submit-add-btn">추가</button>
+      </form>
+
+      <!-- 시간 입력 인라인 드롭 (시간 선택 시 활성화) -->
+      <div id="timeInputWrap" class="time-input-wrap hidden">
+        <label>시작 <input type="time" id="startTimeInput" value="09:00"></label>
+        <label>종료 <input type="time" id="endTimeInput" value="10:00"></label>
+      </div>
+
+      <!-- 투두 목록 컨테이너 -->
+      <div class="todo-list-container">
+        <ul id="todoList" class="todo-list">
+          <!-- JS 동적 렌더링 (가로 한 줄 컴팩트) -->
+        </ul>
+        <div id="emptyTodoState" class="empty-state hidden">
+          <span class="empty-icon">🎀</span>
+          <p>오늘의 기록을 남겨보세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2단: 24시간 타임테이블 섹션 -->
+    <section id="sectionTimetable" class="dashboard-panel panel-timetable">
+      <div class="panel-header">
+        <div class="panel-title-wrap">
+          <span class="panel-icon">🕒</span>
+          <h2>타임테이블 (24h)</h2>
+        </div>
+        <!-- 4번: 검정색 차분한 현재 시각 시계 -->
+        <div class="now-clock-wrap">
+          <span id="currentClockDisplay">--:--:--</span>
+        </div>
+      </div>
+
+      <div class="timetable-scroll-wrapper">
+        <div class="timetable-helper-tip">💡 시간 칸을 클릭하면 해당 시간에 바로 일정을 등록할 수 있어요!</div>
+        <div id="timetableGrid" class="timetable-grid">
+          <!-- 00시부터 23시까지 타임슬롯 JS 생성 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3단: 해빗트래커 섹션 -->
+    <section id="sectionHabit" class="dashboard-panel panel-habit">
+      <div class="panel-header">
+        <div class="panel-title-wrap">
+          <span class="panel-icon">✨</span>
+          <h2>해빗트래커</h2>
+        </div>
+        <div class="habit-header-actions">
+          <button id="addHabitModalBtn" class="add-habit-btn" title="습관 추가">+ 등록</button>
+        </div>
+      </div>
+
+      <div class="habit-content-wrapper">
+        <h3 class="sub-heading">오늘의 실천</h3>
+        <ul id="habitList" class="habit-list">
+          <!-- 습관 목록 JS 동적 렌더링 -->
+        </ul>
+
+        <!-- 2. 주간 / 월간 모드 토글 탭 -->
+        <div class="streak-section-header">
+          <h3 class="sub-heading" id="streakSectionTitle">스트릭 뷰</h3>
+          <div class="habit-view-toggle">
+            <button type="button" id="viewWeeklyBtn" class="view-toggle-btn active">주간</button>
+            <button type="button" id="viewMonthlyBtn" class="view-toggle-btn">월간</button>
+          </div>
+        </div>
+
+        <!-- 주간 스트릭 컨테이너 -->
+        <div id="weeklyStreakContainer">
+          <div class="streak-header-days">
+            <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+          </div>
+          <div id="habitStreakGrid" class="streak-grid">
+            <!-- 1. 일~토 요일별 스트릭 (삭제일은 회색 칸으로 채움) -->
+          </div>
+        </div>
+
+        <!-- 2. 월간 스트릭 컨테이너 (기본 hidden) -->
+        <div id="monthlyStreakContainer" class="hidden">
+          <div class="monthly-select-bar">
+            <label for="monthlyHabitSelect">습관 선택:</label>
+            <select id="monthlyHabitSelect" class="monthly-habit-select">
+              <!-- JS 동적 옵션 생성 -->
+            </select>
+          </div>
+          <div class="monthly-calendar-header">
+            <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+          </div>
+          <div id="monthlyCalendarGrid" class="monthly-calendar-grid">
+            <!-- 이번 달 1일~말일 달력 그리드 JS 동적 생성 -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 8. 타임테이블 시간 칸 클릭 시 바로 등록하는 퀵 모달 -->
+  <div id="quickTimeModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="quickTimeModalTitle">시간대 일정 등록</h3>
+        <button id="closeQuickTimeBtn" class="icon-btn">✕</button>
+      </div>
+      <form id="quickTimeForm">
+        <div class="form-group">
+          <label for="quickTimeText">할 일 / 일정</label>
+          <input type="text" id="quickTimeText" placeholder="예: 운동하기, 미팅" required>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="quickTimeStart">시작 시간</label>
+            <input type="time" id="quickTimeStart" required>
+          </div>
+          <div class="form-group">
+            <label for="quickTimeEnd">종료 시간</label>
+            <input type="time" id="quickTimeEnd" required>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelQuickTimeBtn" class="cancel-btn">취소</button>
+          <button type="submit" class="save-btn">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 습관 신규 등록 모달 -->
+  <div id="habitModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>새 습관 만들기</h3>
+        <button id="closeHabitModalBtn" class="icon-btn">✕</button>
+      </div>
+      <form id="newHabitForm">
+        <div class="form-group">
+          <label for="habitNameInput">습관 명칭</label>
+          <input type="text" id="habitNameInput" placeholder="예: 영양제 챙겨먹기, 물 1L" required>
+        </div>
+        <div class="form-group">
+          <label>아이콘 선택</label>
+          <div class="emoji-picker-row">
+            <button type="button" class="emoji-choice selected">💧</button>
+            <button type="button" class="emoji-choice">💊</button>
+            <button type="button" class="emoji-choice">📖</button>
+            <button type="button" class="emoji-choice">🧘</button>
+            <button type="button" class="emoji-choice">🏃</button>
+            <button type="button" class="emoji-choice">🎀</button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelHabitBtn" class="cancel-btn">취소</button>
+          <button type="submit" class="save-btn">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 모바일 하단 네비게이션 바 -->
+  <nav class="mobile-nav-bar">
+    <button class="nav-tab-btn active" data-target="sectionTodo">
+      <span class="tab-icon">•</span>
+      <span class="tab-label">투두</span>
+    </button>
+    <button class="nav-tab-btn" data-target="sectionTimetable">
+      <span class="tab-icon">🕒</span>
+      <span class="tab-label">타임라인</span>
+    </button>
+    <button class="nav-tab-btn" data-target="sectionHabit">
+      <span class="tab-icon">✨</span>
+      <span class="tab-label">해빗</span>
+    </button>
+  </nav>
+
+  <!-- 토스트 알림 컨테이너 -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
