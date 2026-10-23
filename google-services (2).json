@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "173758123695",
+    "project_id": "bullet-journal-71d23",
+    "storage_bucket": "bullet-journal-71d23.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173758123695:android:a5f3891a0aec9959788e5a",
+        "android_client_info": {
+          "package_name": "com.bujoflow.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn8f4JJkM_DufpZQUpKAXhTIh6S6gvQoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
